@@ -4,6 +4,20 @@ GUI_BOARD_PADDING = 50
 GUI_CELL_SIZE = 20
 GUI_CELL_PADDING = 4
 
+BLANK = (20, 20, 20)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)
+YELLOW = (255, 255, 0)
+
+BOARD_COLOR = {
+    0: BLANK,
+    1: RED,
+    2: GREEN,
+    3: BLUE,
+    4: YELLOW
+}
+
 class Gui:
     def __init__(self, state):
         # Try to allow playing even if you don't have pygame installed, by
@@ -41,5 +55,5 @@ class Gui:
                 y = GUI_BOARD_PADDING + \
                     ((GUI_CELL_SIZE + GUI_CELL_PADDING) * col)
                 pygame.draw.rect(self._screen,
-                    (0, 0, 0),
+                    BOARD_COLOR[self._state.board[row][col]],
                     [x, y, GUI_CELL_SIZE, GUI_CELL_SIZE])
