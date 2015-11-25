@@ -33,4 +33,7 @@ class Move:
         return self._col
 
     def isLegal(self, state):
-        return False # TODO
+        return True # TODO
+
+    def __str__(self):
+        return self.piece

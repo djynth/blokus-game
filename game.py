@@ -3,12 +3,25 @@
 from move import Move
 from game_state import GameState
 from game_utils import *
+import player_dominic.player as player1
+import player_random.player as player2
+import player_random.player as player3
+import player_random.player as player4
 
 passes = 0
 state = GameState()
 while passes < 4:
     player = state.turn % 4
-    move = None # TODO get player move
+
+    if player == 1:
+        move = player1.getMove(state)
+    elif player == 2:
+        move = player2.getMove(state)
+    elif player == 3:
+        move = player3.getMove(state)
+    elif player == 4:
+        move = player4.getMove(state)
+
     if move == None:
         passes += 1
     else:
@@ -17,6 +30,7 @@ while passes < 4:
     try:
         state.applyMove(move)
     except InvalidMove:
-        print('Invalid move by player ', player)
+        print('Invalid move by player ' + str(player) + ':')
+        print('   ' + str(move))
 
 # TODO scoring
