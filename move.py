@@ -16,6 +16,12 @@ class Move:
         except KeyError:
             raise ValueError
 
+    def __str__(self):
+        try:
+            return 'Placeholder real move'
+        except KeyError:
+            raise ValueError
+
     @property
     def piece(self):
         return self._piece
