@@ -1,5 +1,3 @@
-#!/usr/bin/python3
-
 from move import Move
 from game_state import GameState
 from game_utils import *
