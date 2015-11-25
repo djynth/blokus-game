@@ -1,1 +1,1 @@
-Blokus Game!
+A simulation of the board game Blokus including various attempts to create a superior AI player.
