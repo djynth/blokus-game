@@ -14,13 +14,13 @@ while passes < 4:
     player = state.turn % 4
 
     if player == 1:
-        move = player1.getMove(state)
+        move = player1.getMove(state.clone())
     elif player == 2:
-        move = player2.getMove(state)
+        move = player2.getMove(state.clone())
     elif player == 3:
-        move = player3.getMove(state)
+        move = player3.getMove(state.clone())
     elif player == 4:
-        move = player4.getMove(state)
+        move = player4.getMove(state.clone())
 
     if move == None:
         passes += 1
