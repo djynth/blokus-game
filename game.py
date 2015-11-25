@@ -17,11 +17,12 @@ parser.add_argument('--gui',
     help='use the pygame gui')
 args = parser.parse_args()
 
-if args.gui:
-    gui = Gui()
-
 passes = 0
 state = GameState()
+
+if args.gui:
+    gui = Gui(state)
+
 while passes < 4:
     player = state.getPlayer()
 
@@ -54,7 +55,6 @@ while passes < 4:
     try:
         print('  > Move made: ' + str(move))
         state.applyMove(move, player)
-        state.applyMove(move)
     except InvalidMove:
         print('Invalid move!')
         # TODO what now?
