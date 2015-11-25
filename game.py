@@ -31,30 +31,22 @@ while passes < 4:
 
     print('Player ' + str(player) + '\'s turn!')
     if player == 1:
-        move = player1.getMove(state.clone())
+        move = player1.getMove(state.clone(), player)
     elif player == 2:
-        move = player2.getMove(state.clone())
+        move = player2.getMove(state.clone(), player)
     elif player == 3:
-        move = player3.getMove(state.clone())
+        move = player3.getMove(state.clone(), player)
     elif player == 4:
-        move = player4.getMove(state.clone())
+        move = player4.getMove(state.clone(), player)
 
     if move == None:
         passes += 1
     else:
         passes = 0
 
-    print('Player ' + str(player) + ' move:')
-    if move:
-        print(move)
-    else:
-        print('Pass')
-    print()
-    
     try:
-        print('  > Move made: ' + str(move))
         state.applyMove(move, player)
-        state.applyMove(move)
+        print('  > Move made: ' + str(move))
     except InvalidMove:
         print('Invalid move!')
         # TODO what now?
