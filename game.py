@@ -11,8 +11,9 @@ import player_random.player as player4
 passes = 0
 state = GameState()
 while passes < 4:
-    player = state.turn % 4
+    player = state.getPlayer()
 
+    # TODO rotate the board so the player sees themself as top-left
     if player == 1:
         move = player1.getMove(state.clone())
     elif player == 2:
@@ -26,11 +27,19 @@ while passes < 4:
         passes += 1
     else:
         passes = 0
+
+    print('Player ' + str(player) + ' move:')
+    if move:
+        print(move)
+    else:
+        print('Pass')
+    print()
     
     try:
-        state.applyMove(move)
+        state.applyMove(move, player)
     except InvalidMove:
-        print('Invalid move by player ' + str(player) + ':')
-        print('   ' + str(move))
+        print('Invalid move!')
+        # TODO what now?
 
+print(state)
 # TODO scoring

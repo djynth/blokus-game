@@ -33,19 +33,36 @@ class GameState:
     @property
     def piecesLeft(self):
         return self._piecesLeft
+
+    def getPlayer(self):
+        return ((self.turn - 1) % 4) + 1
     
-    def applyMove(self, move):
+    def applyMove(self, move, player):
         self._turn += 1
 
         if move == None:
             return
 
-        if not move.isLegal(self):
-            raise InvalidMove
-        # TODO apply the move to the board
+        geometry = move.getGeometry()
+        for i in range(len(geometry)):
+            for j in range(len(geometry[i])):
+                if not isOnBoard[move.row + i][move.col + j]:
+                    raise InvalidMove
+                if geometry[i][j] and self.board[move.row + i][move.col + j] != 0:
+                    raise InvalidMove
+
+        for i in range(len(geometry)):
+            for j in range(len(geometry[i])):
+                if geometry[i][j]:
+                    self._board[move.row + i][move.col + j] = player
 
     def clone(self):
         clone = GameState(self.turn, self.board, self.piecesLeft)
 
     def __str__(self):
-        return string(self.turn) # TODO
+        s = 'Turn ' + str(self.turn) + '\n'
+        s += gridToString(self.board)
+        s += 'Pieces Remaining:\n'
+        for player in [1,2,3,4]:
+            s += '   Player ' + str(player) + ': ' + str(self.piecesLeft[player]) + '\n'
+        return s
