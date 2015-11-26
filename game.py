@@ -17,11 +17,12 @@ parser.add_argument('--gui',
     help='use the pygame gui')
 args = parser.parse_args()
 
-if args.gui:
-    gui = Gui()
-
 passes = 0
 state = GameState()
+
+if args.gui:
+    gui = Gui(state)
+
 while passes < 4:
     player = state.getPlayer()
 
@@ -69,5 +70,3 @@ if len(winners) == 1:
     print('Player ' + str(winners[0]) + ' wins!')
 elif len(winners) > 1:
     print('Tie between ' + str(winners) + '!')
-
-# TODO scoring
