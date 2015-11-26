@@ -56,19 +56,20 @@ class GameState:
         onCorner = False
         for i in range(len(geometry)):
             for j in range(len(geometry[i])):
-                for edgeX in [-1, 0, 1]:
-                    for edgeY in [-1, 0, 1]:
-                        row = move.row + i + edgeY
-                        col = move.col + j + edgeX
-                        if edgeX == 0 and edgeY == 0:
-                            if not isOnBoard(row, col) or self.board[row][col] != 0:
-                                raise InvalidMove
-                        elif edgeX == 0 or edgeY == 0:
-                            if isOnBoard(row, col) and self.board[row][col] == player:
-                                raise InvalidMove
-                        else:
-                            if isOnBoard(row, col) and self.board[row][col] == player:
-                                onCorner = True
+                if geometry[i][j]:
+                    for edgeX in [-1, 0, 1]:
+                        for edgeY in [-1, 0, 1]:
+                            row = move.row + i + edgeY
+                            col = move.col + j + edgeX
+                            if edgeX == 0 and edgeY == 0:
+                                if not isOnBoard(row, col) or self.board[row][col] != 0:
+                                    raise InvalidMove
+                            elif edgeX == 0 or edgeY == 0:
+                                if isOnBoard(row, col) and self.board[row][col] == player:
+                                    raise InvalidMove
+                            else:
+                                if isOnBoard(row, col) and self.board[row][col] == player:
+                                    onCorner = True
         if not onCorner:
             raise InvalidMove
 
