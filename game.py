@@ -56,14 +56,10 @@ while passes < 4:
     else:
         passes = 0
 
-    try:
-        state.applyMove(move, player)
+    if state.applyMove(move, player):
         print('  > Move made: ' + str(move))
-    except InvalidMove as e:
-        print('Invalid move!')
-        print(e)
-
-#    time.sleep(1)
+    else:
+        print('  > Invalid move!')
 
 print(state)
 totalCells = getTotalCells()

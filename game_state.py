@@ -45,14 +45,9 @@ class GameState:
                     cells += 1
         return cells
 
-    def applyMove(self, move, player):
-        self._turn += 1
-
-        if move == None:
-            return
-
+    def isMoveValid(self, move, player):
         if not move.piece in self._piecesLeft[player]:
-            raise InvalidMove('piece already been used')
+            return False
 
         geometry = move.getGeometry()
 
@@ -66,24 +61,62 @@ class GameState:
                             col = move.col + j + edgeX
                             if edgeX == 0 and edgeY == 0:
                                 if not isOnBoard(row, col) or self.board[row][col] != 0:
-                                    raise InvalidMove('piece not on the board')
+                                    return False
                                 if isCornerTile(row, col, player):
                                     onCorner = True
                             elif edgeX == 0 or edgeY == 0:
                                 if isOnBoard(row, col) and self.board[row][col] == player:
-                                    raise InvalidMove('edge-on to your piece')
+                                    return False
                             else:
                                 if isOnBoard(row, col) and self.board[row][col] == player:
                                     onCorner = True
         if not onCorner:
-            raise InvalidMove('not connected via corner')
+            return False
+        return True
 
+    def hasMoveBeenPlayed(self, move, player):
+        geometry = move.getGeometry()
+        for i in range(len(geometry)):
+            for j in range(len(geometry[i])):
+                if geometry[i][j] and self.board[move.row + i][move.col + j] != player:
+                    return False
+        return True
+
+    def applyMove(self, move, player):
+        self._turn += 1
+
+        if move == None:
+            return True
+
+        if not self.isMoveValid(move, player):
+            return False
+
+        geometry = move.getGeometry()
         for i in range(len(geometry)):
             for j in range(len(geometry[i])):
                 if geometry[i][j]:
                     self._board[move.row + i][move.col + j] = player
 
         self._piecesLeft[player].remove(move.piece)
+        return True
+
+    def undoMove(self, move, player):
+        self._turn -= 1
+
+        if move == None:
+            return True
+
+        if not self.hasMoveBeenPlayed(move, player):
+            return False
+
+        geometry = move.getGeometry()
+        for i in range(len(geometry)):
+            for j in range(len(geometry[i])):
+                if geometry[i][j]:
+                    self._board[move.row + i][move.col + j] = 0
+
+        self._piecesLeft[player].append(move.piece)
+        return True
 
     def clone(self):
         return GameState(self.turn, self.board, self.piecesLeft)
