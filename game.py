@@ -4,7 +4,7 @@ from game_utils import *
 from gui import Gui
 import argparse
 from player_gui.player import GuiPlayer
-import player_craig.player_random as player1
+import player_console.player as player1
 import player_craig.player_biggest_random as player2
 import player_craig.player_random as player3
 import player_craig.player_biggest_random as player4
@@ -23,6 +23,15 @@ state = GameState()
 
 if args.gui:
     gui = Gui(state)
+    # Upgrade console players to GUI players in GUI mode
+    if player1.__name__ == 'player_console.player':
+        player1 = GuiPlayer(gui)
+    if player2.__name__ == 'player_console.player':
+        player2 = GuiPlayer(gui)
+    if player3.__name__ == 'player_console.player':
+        player3 = GuiPlayer(gui)
+    if player4.__name__ == 'player_console.player':
+        player4 = GuiPlayer(gui)
 
 t0 = time.clock()
 
@@ -77,4 +86,7 @@ elif len(winners) > 1:
 
 print("Game took " + str(time.clock() - t0) + " seconds")
 
-time.sleep(100)
+if args.gui:
+    gui.waitForQuit()
+else:
+    time.sleep(100)

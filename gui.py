@@ -242,6 +242,14 @@ class Gui:
                     self.guiBoard.previewPiece(selectedPiece, selectedGeometry, event.pos)
             self.refresh()
 
+    def waitForQuit(self):
+        import pygame
+
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    sys.exit()
+
     def _drawBoard(self):
         import pygame
 
