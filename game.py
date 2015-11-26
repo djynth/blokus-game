@@ -4,10 +4,10 @@ from game_utils import *
 from gui import Gui
 import argparse
 from player_gui.player import GuiPlayer
-import player_craig.player as player1
-import player_craig.player as player2
-import player_craig.player as player3
-import player_craig.player as player4
+import player_craig.player_random as player1
+import player_craig.player_biggest_random as player2
+import player_craig.player_random as player3
+import player_craig.player_biggest_random as player4
 import sys
 import time
 
@@ -23,10 +23,8 @@ state = GameState()
 
 if args.gui:
     gui = Gui(state)
-    player1 = GuiPlayer(gui)
-    player2 = GuiPlayer(gui)
-    player3 = GuiPlayer(gui)
-    player4 = GuiPlayer(gui)
+
+t0 = time.clock()
 
 while passes < 4:
     player = state.getPlayer()
@@ -76,3 +74,7 @@ if len(winners) == 1:
     print('Player ' + str(winners[0]) + ' wins!')
 elif len(winners) > 1:
     print('Tie between ' + str(winners) + '!')
+
+print("Game took " + str(time.clock() - t0) + " seconds")
+
+time.sleep(100)
