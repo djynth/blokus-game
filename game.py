@@ -25,7 +25,6 @@ state = GameState()
 while passes < 4:
     player = state.getPlayer()
 
-    # TODO rotate the board so the player sees themself as top-left
     if args.gui:
         gui.update()
 
@@ -49,10 +48,26 @@ while passes < 4:
         print('  > Move made: ' + str(move))
     except InvalidMove:
         print('Invalid move!')
-        # TODO what now?
 
     time.sleep(1)
 
 print(state)
+totalCells = getTotalCells()
+winners = []
+minCells = ROWS*COLS
+for player in [1,2,3,4]:
+    remaining = totalCells - state.getCellsOnBoard(player)
+    if remaining < minCells:
+        winners = [player]
+        minCells = remaining
+    elif remaining == minCells:
+        winners.append(player)
+    print('Player ' + str(player) + ' has ' + str(remaining) + ' cells remaining.')
+
+print()
+if len(winners) == 1:
+    print('Player ' + str(winners[0]) + ' wins!')
+elif len(winners) > 1:
+    print('Tie between ' + str(winners) + '!')
 
 # TODO scoring

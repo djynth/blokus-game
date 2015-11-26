@@ -37,6 +37,14 @@ class GameState:
     def getPlayer(self):
         return ((self.turn - 1) % 4) + 1
     
+    def getCellsOnBoard(self, player):
+        cells = 0
+        for row in range(ROWS):
+            for col in range(COLS):
+                if self.board[row][col] == player:
+                    cells += 1
+        return cells
+
     def applyMove(self, move, player):
         self._turn += 1
 

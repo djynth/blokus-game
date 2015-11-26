@@ -18,6 +18,16 @@ def isOnBoard(row, col):
         return False
     return True
 
+def getTotalCells():
+    cells = 0
+    for piece in PIECES:
+        geometry = piece[0]
+        for row in range(len(geometry)):
+            for col in range(len(geometry[row])):
+                if geometry[row][col]:
+                    cells += 1
+    return cells
+
 def defaultToString(val):
     if not val:
         return ' '
