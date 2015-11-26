@@ -83,10 +83,12 @@ class GuiPieceChooser:
         self._screen = screen
         self._player = player
         self._pieces = pieces
+        self._geometryNums = list(map(lambda p: 0, pieces))
+        self._selectedPiece = None
 
-        # Room for even the biggest piece
         self.PIECE_PADDING = 10
-        self.PIECE_SIZE = (CELL_SIZE * 5) + self.PIECE_PADDING
+        # Room for even the biggest piece
+        self.PIECE_SIZE = (CELL_SIZE * 5)
         self.PIECES_PER_COLUMN = 4
 
     # TODO(azirbel): Duplicated
@@ -100,6 +102,8 @@ class GuiPieceChooser:
     # TODO(azirbel): Just set the props directly
     def setPieces(self, pieces):
         self._pieces = pieces
+        self._geometryNums = list(map(lambda p: 0, pieces))
+        self._selectedPiece = None
 
     def setPlayer(self, player):
         self._player = player
@@ -114,8 +118,9 @@ class GuiPieceChooser:
             pieceRow = pieceNum // self.PIECES_PER_COLUMN
             pieceCol = pieceNum % self.PIECES_PER_COLUMN
 
-            chooserPieceCoords = (pieceRow * self.PIECE_SIZE,
-                pieceCol * self.PIECE_SIZE)
+            chooserPieceCoords = (
+                pieceRow * (self.PIECE_SIZE + self.PIECE_PADDING),
+                pieceCol * (self.PIECE_SIZE + self.PIECE_PADDING))
             screenPieceCoords = self.chooserCoordsToScreen(chooserPieceCoords)
 
             screenPieceBox = [
@@ -125,7 +130,10 @@ class GuiPieceChooser:
                 self.PIECE_SIZE
             ]
 
-            geometry = PIECES[piece][0]
+            if self._selectedPiece == piece:
+                pygame.draw.rect(self._screen, (240, 240, 240), screenPieceBox)
+
+            geometry = PIECES[piece][self._geometryNums[pieceNum]]
             fullGeometry = []
             for i in range(5):
                 row = []
@@ -139,14 +147,22 @@ class GuiPieceChooser:
             pieceBoard.draw()
 
     # clickCoords must be relative to the chooser's box
-    def getPieceFromCoords(self, screenCoords):
+    def handleClick(self, screenCoords):
         chooserCoords = self.screenCoordsToChooser(screenCoords)
-        col = chooserCoords[1] // self.PIECE_SIZE
-        row = chooserCoords[0] // self.PIECE_SIZE
+        col = chooserCoords[1] // (self.PIECE_SIZE + self.PIECE_PADDING)
+        row = chooserCoords[0] // (self.PIECE_SIZE + self.PIECE_PADDING)
         pieceNum = row * self.PIECES_PER_COLUMN + col
         if len(self._pieces) <= pieceNum:
             return None
-        return self._pieces[pieceNum]
+
+        clickedPiece = self._pieces[pieceNum]
+        if self._selectedPiece and self._selectedPiece == clickedPiece:
+            self._geometryNums[pieceNum] = \
+                (self._geometryNums[pieceNum] + 1) % len(PIECES[self._selectedPiece])
+        else:
+            self._selectedPiece = clickedPiece
+        self.draw()
+        return self._pieces[pieceNum], self._geometryNums[pieceNum]
 
 class Gui:
     def __init__(self, state):
@@ -181,6 +197,7 @@ class Gui:
         self.guiPieceChooserBox.setPieces(pieces)
 
         selectedPiece = None
+        selectedGeometry = 0
 
         while True:
             for event in pygame.event.get():
@@ -190,11 +207,16 @@ class Gui:
                     if pygame.Rect(self.GUI_BOARD_BOX).collidepoint(event.pos):
                         if selectedPiece:
                             location = self.guiBoard.getGridLocation(event.pos)
-                            return Move(selectedPiece, 0, location[0], location[1])
+                            return Move(
+                                selectedPiece,
+                                selectedGeometry,
+                                location[0],
+                                location[1])
                         else:
                             return None
                     else:
-                        selectedPiece = self.guiPieceChooserBox.getPieceFromCoords(event.pos)
+                        selectedPiece, selectedGeometry = \
+                            self.guiPieceChooserBox.handleClick(event.pos)
             self.refresh()
 
     def _drawBoard(self):
