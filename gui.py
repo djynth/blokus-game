@@ -24,12 +24,15 @@ class GuiBoard:
     def __init__(self, box, screen, board):
         self._box = box
         self._screen = screen
+        self._board = board
 
         self.loadBoard(board)
 
-    def loadBoard(self, board):
+    def loadBoard(self, board=None):
+        if board:
+            self._board = board
         self._colorGrid = []
-        for i, row in enumerate(board):
+        for i, row in enumerate(self._board):
             self._colorGrid.append([])
             for cell in row:
                 color = BLANK
@@ -70,12 +73,27 @@ class GuiBoard:
         row = boardCoords[1] // CELL_SIZE
         return (row, col)
 
+    def previewPiece(self, piece, geometryNum, screenCoords):
+        gridLocation = self.getGridLocation(screenCoords)
+        geometry = PIECES[piece][geometryNum]
+        self.clearOverrideColors()
+        for i, row in enumerate(geometry):
+            for j, cell in enumerate(row):
+                if not cell:
+                    continue
+                position = (gridLocation[0] + i, gridLocation[1] + j)
+                if (0 <= position[0] and position[0] < ROWS) and \
+                        (0 <= position[1] and position[1] < COLS):
+                    self.overrideCellColor(position, (0, 0, 0))
+
     # location is a (row, col) tuple
-    def overrideCellColor(self, location):
-        pass
+    def overrideCellColor(self, location, color):
+        self._colorGrid[location[0]][location[1]] = color
+        self.draw()
 
     def clearOverrideColors(self):
-        pass
+        self.loadBoard()
+        self.draw()
 
 class GuiPieceChooser:
     def __init__(self, box, screen, player=1, pieces=[]):
@@ -111,7 +129,7 @@ class GuiPieceChooser:
     def draw(self):
         import pygame
 
-        # Clear the board
+        # Clear the area
         pygame.draw.rect(self._screen, (200, 200, 200), self._box)
 
         for pieceNum, piece in enumerate(self._pieces):
@@ -182,10 +200,11 @@ class Gui:
         self.guiPieceChooserBox = \
             GuiPieceChooser(self.GUI_PIECE_CHOOSER_BOX, self._screen)
 
-    def refresh(self):
+    def refresh(self, hardRefresh=False):
         import pygame
 
-        self.guiBoard.loadBoard(self._state.board)
+        if hardRefresh:
+            self.guiBoard.loadBoard(self._state.board)
         self.guiBoard.draw()
         self.guiPieceChooserBox.draw()
         pygame.display.flip()
@@ -217,6 +236,10 @@ class Gui:
                     else:
                         selectedPiece, selectedGeometry = \
                             self.guiPieceChooserBox.handleClick(event.pos)
+                if event.type == pygame.MOUSEMOTION and \
+                        pygame.Rect(self.GUI_BOARD_BOX).collidepoint(event.pos) and \
+                        selectedPiece:
+                    self.guiBoard.previewPiece(selectedPiece, selectedGeometry, event.pos)
             self.refresh()
 
     def _drawBoard(self):

@@ -30,7 +30,7 @@ while passes < 4:
     player = state.getPlayer()
 
     if args.gui:
-        gui.refresh()
+        gui.refresh(True)
 
     print('Player ' + str(player) + '\'s turn!')
     if player == 1:
