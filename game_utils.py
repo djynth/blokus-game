@@ -1,12 +1,8 @@
+from piece_utils import *
+
 ROWS = 20
 COLS = 20
-
-# TODO add all the pieces
-PIECES = {
-    'singleton' : [
-        [[True]]
-    ],
-}
+PIECES = importGeometries('pieces.txt')
 
 class InvalidMove(Exception):
     pass

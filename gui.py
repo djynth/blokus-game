@@ -12,10 +12,10 @@ YELLOW = (255, 255, 0)
 
 BOARD_COLOR = {
     0: BLANK,
-    1: RED,
-    2: GREEN,
-    3: BLUE,
-    4: YELLOW
+    1: BLUE,
+    2: YELLOW,
+    3: RED,
+    4: GREEN
 }
 
 class Gui:
