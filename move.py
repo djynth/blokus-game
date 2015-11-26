@@ -16,12 +16,6 @@ class Move:
         except KeyError:
             raise ValueError
 
-    def __str__(self):
-        try:
-            return 'Placeholder real move'
-        except KeyError:
-            raise ValueError
-
     @property
     def piece(self):
         return self._piece
@@ -42,4 +36,4 @@ class Move:
         return PIECES[self.piece][self.numGeometry]
 
     def __str__(self):
-        return self.piece + ' [' + self.numGeometry + '] at (' + self.row + ',' + self.col + ')'
+        return self.piece + ' [' + str(self.numGeometry) + '] at (' + str(self.row) + ',' + str(self.col) + ')'

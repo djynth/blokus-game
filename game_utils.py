@@ -39,7 +39,7 @@ def getTotalCells():
 def defaultToString(val):
     if not val:
         return ' '
-    if isInstance(val, bool):
+    if isinstance(val, bool):
         return 'X'
     return str(val)
 

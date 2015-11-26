@@ -3,7 +3,7 @@ from game_state import GameState
 from game_utils import *
 from gui import Gui
 import argparse
-import player_dominic.player as player1
+import player_console.player as player1
 import player_random.player as player2
 import player_random.player as player3
 import player_random.player as player4
@@ -47,8 +47,9 @@ while passes < 4:
     try:
         state.applyMove(move, player)
         print('  > Move made: ' + str(move))
-    except InvalidMove:
+    except InvalidMove as e:
         print('Invalid move!')
+        print(e)
 
     time.sleep(1)
 

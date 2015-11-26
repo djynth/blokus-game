@@ -12,7 +12,7 @@ class GameState:
                 for col in range(COLS):
                     if 0 > board[row][col] or board[row][col] > 4:
                         raise ValueError
-                    self._board = board[row][col]
+                    self._board[row][col] = board[row][col]
 
         self._piecesLeft = {}
         if piecesLeft:
@@ -51,6 +51,9 @@ class GameState:
         if move == None:
             return
 
+        if not move.piece in self._piecesLeft[player]:
+            raise InvalidMove('piece already been used')
+
         geometry = move.getGeometry()
 
         onCorner = False
@@ -63,25 +66,27 @@ class GameState:
                             col = move.col + j + edgeX
                             if edgeX == 0 and edgeY == 0:
                                 if not isOnBoard(row, col) or self.board[row][col] != 0:
-                                    raise InvalidMove
+                                    raise InvalidMove('piece not on the board')
                                 if isCornerTile(row, col, player):
                                     onCorner = True
                             elif edgeX == 0 or edgeY == 0:
                                 if isOnBoard(row, col) and self.board[row][col] == player:
-                                    raise InvalidMove
+                                    raise InvalidMove('edge-on to your piece')
                             else:
                                 if isOnBoard(row, col) and self.board[row][col] == player:
                                     onCorner = True
         if not onCorner:
-            raise InvalidMove
+            raise InvalidMove('not connected via corner')
 
         for i in range(len(geometry)):
             for j in range(len(geometry[i])):
                 if geometry[i][j]:
                     self._board[move.row + i][move.col + j] = player
 
+        self._piecesLeft[player].remove(move.piece)
+
     def clone(self):
-        clone = GameState(self.turn, self.board, self.piecesLeft)
+        return GameState(self.turn, self.board, self.piecesLeft)
 
     def __str__(self):
         s = 'Turn ' + str(self.turn) + '\n'
