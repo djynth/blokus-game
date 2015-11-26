@@ -1,6 +1,11 @@
 from game_utils import *
 
+# Represents the state of the game at a single turn.
 class GameState:
+    # Creates a new GameState from the given parameters.
+    # This constructor checks that the turn is strictly positive and raises a
+    #  ValueError if it is not.
+    # Accessed via GameState(_,_,_), not state.__init__(_,_,_).
     def __init__(self, turn = 1, board = None, piecesLeft = None):
         if turn < 1:
             raise ValueError
@@ -22,21 +27,31 @@ class GameState:
             for player in [1,2,3,4]:
                 self._piecesLeft[player] = list(PIECES.keys())
 
+    # The current turn of the game, starting from 1 for the first turn.
     @property
     def turn(self):
         return self._turn
 
+    # The current board as a 2D array of integers, with 0 if no tile has been
+    #  placed at a given location, or the player number (1-4) of the tile if one
+    #  has been placed.
     @property
     def board(self):
         return self._board
 
+    # Gets the pieces not yet placed by all the players as a dictionary with
+    #  keys being the player numbers (1-4) and values being the list of the
+    #  names of the pieces left for that player.
     @property
     def piecesLeft(self):
         return self._piecesLeft
 
+    # Gets the player whose turn it currently is as their number, 1-4.
     def getPlayer(self):
         return ((self.turn - 1) % 4) + 1
 
+    # Gets the number of tiles placed by the given player currently on the
+    #  board.
     def getCellsOnBoard(self, player):
         cells = 0
         for row in range(ROWS):
@@ -45,6 +60,9 @@ class GameState:
                     cells += 1
         return cells
 
+    # Determines whether the given Move by the given player is legal, i.e. is on
+    #  the board, is not edge-on with another piece, is connected via a corner,
+    #  etc.
     def isMoveValid(self, move, player):
         if not move.piece in self._piecesLeft[player]:
             return False
@@ -74,6 +92,8 @@ class GameState:
             return False
         return True
 
+    # Checks whether the given Move has been played by the given player at any
+    #  time in the past.
     def hasMoveBeenPlayed(self, move, player):
         geometry = move.getGeometry()
         for i in range(len(geometry)):
@@ -82,6 +102,8 @@ class GameState:
                     return False
         return True
 
+    # Exectures a Move by the given player on this game.
+    # This game itself will be updated to reflect the Move.
     def applyMove(self, move, player):
         self._turn += 1
 
@@ -100,6 +122,8 @@ class GameState:
         self._piecesLeft[player].remove(move.piece)
         return True
 
+    # Undoes a move by the given player (no matter of how long ago it was
+    #  played).
     def undoMove(self, move, player):
         self._turn -= 1
 
@@ -118,9 +142,13 @@ class GameState:
         self._piecesLeft[player].append(move.piece)
         return True
 
+    # Creates a new GameState exactly mirroring this one which can be modified
+    #  without affecting the current one.
     def clone(self):
         return GameState(self.turn, self.board, self.piecesLeft)
 
+    # Converts this GameState into a human-readable string.
+    # Accessed via str(state), not state.__str__().
     def __str__(self):
         s = 'Turn ' + str(self.turn) + '\n'
         s += gridToString(self.board)
