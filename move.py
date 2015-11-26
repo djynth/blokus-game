@@ -35,5 +35,14 @@ class Move:
     def getGeometry(self):
         return PIECES[self.piece][self.numGeometry]
 
+    def getNumCells(self):
+        p = PIECES[self.piece][0]
+        cells = 0
+        for i in range(0,len(p)):
+            for j in range(0,len(p[0])):
+                if p[i][j]:
+                    cells += 1
+        return cells
+
     def __str__(self):
         return self.piece + ' [' + str(self.numGeometry) + '] at (' + str(self.row) + ',' + str(self.col) + ')'
