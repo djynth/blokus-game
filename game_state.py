@@ -4,7 +4,7 @@ class GameState:
     def __init__(self, turn = 1, board = None, piecesLeft = None):
         if turn < 1:
             raise ValueError
-        self._turn = 1
+        self._turn = turn
 
         self._board = [[0 for x in range(COLS)] for x in range(ROWS)]
         if board:
@@ -25,18 +25,18 @@ class GameState:
     @property
     def turn(self):
         return self._turn
-    
+
     @property
     def board(self):
         return self._board
-    
+
     @property
     def piecesLeft(self):
         return self._piecesLeft
 
     def getPlayer(self):
         return ((self.turn - 1) % 4) + 1
-    
+
     def getCellsOnBoard(self, player):
         cells = 0
         for row in range(ROWS):

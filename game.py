@@ -54,7 +54,7 @@ while passes < 4:
         print('Invalid move!')
         print(e)
 
-    time.sleep(1)
+#    time.sleep(1)
 
 print(state)
 totalCells = getTotalCells()
