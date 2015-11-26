@@ -1,0 +1,12 @@
+Run python 3.5:
+C:\Users\zirbel\Documents\GitHub\blokus-game>C:\Users\zirbel\AppData\Local\Programs\Python\Python35-32\python.exe game.py --gui
+
+Get pygame for python 3.5:
+http://www.lfd.uci.edu/~gohlke/pythonlibs/#pygame
+
+Use pip3 to install pygame:
+
+C:\Users\zirbel\Documents\GitHub\blokus-game>C:\Users\zirbel\AppData\Local\Programs\Python\Python35-32\scripts\pip3 install C:\Users\zirbel\Downloads\pygame-1.9
+.2a0-cp35-none-win32.whl
+
+

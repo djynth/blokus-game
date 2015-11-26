@@ -3,10 +3,13 @@ from game_state import GameState
 from game_utils import *
 from gui import Gui
 import argparse
-import player_console.player as player1
-import player_random.player as player2
-import player_random.player as player3
-import player_random.player as player4
+import player_craig.player as player1
+import player_craig.player as player2
+import player_craig.player as player3
+import player_craig.player as player4
+#import player_console.player as player2
+#import player_random.player as player3
+#import player_random.player as player4
 import sys
 import time
 
