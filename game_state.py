@@ -64,6 +64,8 @@ class GameState:
                             if edgeX == 0 and edgeY == 0:
                                 if not isOnBoard(row, col) or self.board[row][col] != 0:
                                     raise InvalidMove
+                                if isCornerTile(row, col, player):
+                                    onCorner = True
                             elif edgeX == 0 or edgeY == 0:
                                 if isOnBoard(row, col) and self.board[row][col] == player:
                                     raise InvalidMove

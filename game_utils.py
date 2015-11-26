@@ -14,6 +14,18 @@ def isOnBoard(row, col):
         return False
     return True
 
+# whether the given row, col is the corner belonging to given player
+def isCornerTile(row, col, player):
+    if player == 1:
+        return row == 0 and col == 0
+    if player == 2:
+        return row == 0 and col == COLS-1
+    if player == 3:
+        return row == ROWS-1 and col == COLS-1
+    if player == 4:
+        return row == ROWS-1 and col == 0
+    return False
+
 def getTotalCells():
     cells = 0
     for piece in PIECES:
