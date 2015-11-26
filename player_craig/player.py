@@ -6,10 +6,7 @@ import random
 def getMove(state, player):
 
     print(state)
-
     print(player)
-
-    mymove = None
 
     if state.turn < 5:          # this is my first turn
       if player == 1:
@@ -89,14 +86,9 @@ def getMove(state, player):
                   newstate = state.clone()
                   move = Move(piece,geom,row,col)
 
-#                  print(str(p))
-#                  print("a is "+str(a)+" and b is "+str(b)+" and row is "+str(row)+" and col is "+str(col))
-
-
                   try:
                     newstate.applyMove(move, player)
                     okmoves.append(move)
-        #              print(str(move))
                   except:
                     c = 1
 
