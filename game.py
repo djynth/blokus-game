@@ -3,13 +3,11 @@ from game_state import GameState
 from game_utils import *
 from gui import Gui
 import argparse
+from player_gui.player import GuiPlayer
 import player_craig.player as player1
 import player_craig.player as player2
 import player_craig.player as player3
 import player_craig.player as player4
-#import player_console.player as player2
-#import player_random.player as player3
-#import player_random.player as player4
 import sys
 import time
 
@@ -25,12 +23,16 @@ state = GameState()
 
 if args.gui:
     gui = Gui(state)
+    player1 = GuiPlayer(gui)
+    player2 = GuiPlayer(gui)
+    player3 = GuiPlayer(gui)
+    player4 = GuiPlayer(gui)
 
 while passes < 4:
     player = state.getPlayer()
 
     if args.gui:
-        gui.update()
+        gui.refresh()
 
     print('Player ' + str(player) + '\'s turn!')
     if player == 1:
