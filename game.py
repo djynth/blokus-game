@@ -4,10 +4,10 @@ from game_utils import *
 from gui import Gui
 import argparse
 from player_gui.player import GuiPlayer
-import player_console.player as player1
+import player_craig.player_biggest_random as player1
 import player_craig.player_biggest_random as player2
-import player_craig.player_random as player3
-import player_craig.player_biggest_random as player4
+import player_craig.player_fewest_options as player3
+import player_craig.player_fewest_options as player4
 import sys
 import time
 
