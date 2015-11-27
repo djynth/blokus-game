@@ -31,4 +31,5 @@ def getMove(state, player):
         print('Move: ' + str(move) + ' => ' + str(moveScore))
         if (not bestMoveScore) or (moveScore > bestMoveScore):
             bestMove = move
+            bestMoveScore = moveScore
     return bestMove
