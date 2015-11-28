@@ -52,7 +52,7 @@ def runGame(players, logger, slowMode=False, gui=False):
             logger.log('  > Invalid move!')
 
         if slowMode:
-            time.sleep(1)
+            time.sleep(.5)
 
     logger.log(state)
     totalCells = getTotalCells()
