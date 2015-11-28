@@ -28,7 +28,6 @@ def getMove(state, player):
         state.applyMove(move, player)
         moveScore = score(state, player)
         state.undoMove(move, player)
-        print('Move: ' + str(move) + ' => ' + str(moveScore))
         if (not bestMoveScore) or (moveScore > bestMoveScore):
             bestMove = move
             bestMoveScore = moveScore

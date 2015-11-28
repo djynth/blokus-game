@@ -8,11 +8,11 @@ def getMove(state, player):
 
     oksquares = getLegalSquares(state,player)
 
-    print("  > Found "+str(len(oksquares))+" OK squares to occupy")
+    #print("  > Found "+str(len(oksquares))+" OK squares to occupy")
 
     okmoves = getLegalMoves(state,player,oksquares)
 
-    print("  > Found "+str(len(okmoves))+" legal moves")
+    #print("  > Found "+str(len(okmoves))+" legal moves")
 
     mymove = None
 
