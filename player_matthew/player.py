@@ -2,6 +2,7 @@ from game_state import *
 from move import *
 from game_utils import *
 from move_utils import *
+import random
 
 print('Matthew wins!')
 
@@ -24,7 +25,7 @@ def getMove(state, player):
 	legalMoves = getLegalMoves(state, player)
 	
 	if len(legalMoves) > 0:
-		return legalMoves[0]
+		return legalMoves[random.randint(0,len(legalMoves)-1)]
 	else:
 		return None
 
