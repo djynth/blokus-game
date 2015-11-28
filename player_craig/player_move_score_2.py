@@ -73,6 +73,13 @@ def getMove(state, player):
           state.undoMove(option['move'],player)
           score *= option['squaresafter']
 
+        if 10 > 1:
+          for nextplayer in range(1,5):
+            if nextplayer != player:
+              state.applyMove(option['move'], player)
+              score = score / len(getLegalSquares(state,nextplayer))
+              state.undoMove(option['move'],player)
+
         option['distancefromcorner'] = max(1,math.sqrt(math.pow(option['square'][0]-homecorner[0],2)+math.pow(option['square'][1]-homecorner[1],2)))
         score *= option['distancefromcorner']
 
