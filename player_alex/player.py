@@ -22,13 +22,18 @@ def score(state, player):
     return playerTiles - ((totalTiles - playerTiles) / 3)
 
 def getMove(state, player):
-    bestMoveScore = None
-    bestMove = None
+    bestMoveScore = score(state, player)
+    bestMoves = []
     for move in MoveUtils.getLegalMoves(state, player):
         state.applyMove(move, player)
         moveScore = score(state, player)
         state.undoMove(move, player)
-        if (not bestMoveScore) or (moveScore > bestMoveScore):
-            bestMove = move
-            bestMoveScore = moveScore
-    return bestMove
+        if moveScore >= bestMoveScore:
+            if moveScore > bestMoveScore:
+                bestMoves = []
+                bestMoveScore = moveScore
+            bestMoves.append(move)
+    if len(bestMoves) > 0:
+        return random.choice(bestMoves)
+    else:
+        return None

@@ -1,8 +1,8 @@
 import argparse
-import player_alex.player as player1 #top left
+import player_craig.player_fewest_options as player1 #top left
 import player_craig.player_biggest_random as player2 #top right
 import player_craig.player_random as player3 #bottom right
-import player_craig.player_fewest_options as player4 #bottom left
+import player_alex.player as player4 #bottom left
 import game_runner as GameRunner
 from game_logger import Logger
 import random
