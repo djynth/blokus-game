@@ -1,10 +1,11 @@
 import argparse
 import player_matthew.player as player1 #top left
-import player_matthew.player as player2 #top right
+import player_craig.player_random as player2 #top right
 import player_matthew.player as player3 #bottom right
-import player_matthew.player as player4 #bottom left
+import player_craig.player_random as player4 #bottom left
 import game_runner as GameRunner
 from game_logger import Logger
+import random
 
 parser = argparse.ArgumentParser(description='Run the blokus game.')
 parser.add_argument('--gui',
@@ -21,14 +22,18 @@ if args.runs == 1:
     GameRunner.runGame(players, logger, False, args.gui)
 else:
     logger = Logger(2)
-    players = [player1, player2, player3, player4]
+    wrappedPlayers = [(0, player1), (1, player2), (2, player3), (3, player4)]
+    originalPlayers = [player1, player2, player3, player4]
     winCount = [0, 0, 0, 0]
     for i in range(args.runs):
         print('Playing game ' + str(i + 1) + ' of ' + str(args.runs))
+        random.shuffle(wrappedPlayers)
+        players = list(map(lambda w: w[1], wrappedPlayers))
         winners = GameRunner.runGame(players, logger, False, args.gui)
         for winner in winners:
-            winCount[winner - 1] += 1
-        print('Winners: ' + str(winCount))
+            winCount[wrappedPlayers[winner - 1][0]] += 1
 
-    for playerNum, count in enumerate(winCount):
-        print('Player ' + str(playerNum + 1) + ' won ' + str(count) + ' times.')
+        for playerNum, count in enumerate(winCount):
+            print('Player ' + str(playerNum + 1) +
+                ' (' + str(originalPlayers[playerNum].__name__) + ')' +
+                ' won ' + str(count) + ' times.')
