@@ -14,8 +14,10 @@ class GameState:
     #                                     played, as a dictionary from the
     #                                     player number to a list of the names
     #                                     of the remaining pieces
+    # @param moves      Move []           the Moves which have been made, in
+    #                                     order
     # @return GameState
-    def __init__(self, turn = 1, board = None, piecesLeft = None):
+    def __init__(self, turn=1, board=None, piecesLeft=None, moves=[]):
         if turn < 1:
             raise ValueError
         self._turn = turn
@@ -35,6 +37,13 @@ class GameState:
         else:
             for player in [1,2,3,4]:
                 self._piecesLeft[player] = list(PIECES.keys())
+
+        # possibly should check that each move in the sequence is legal given
+        #  the previous ones, and that they have all indeed been played in the
+        #  board
+        self._moves = []
+        for move in moves:
+            self._moves.append(move.clone())
 
     # The current turn of the game, starting from 1 for the first turn.
     # @return int
@@ -57,6 +66,12 @@ class GameState:
     @property
     def piecesLeft(self):
         return self._piecesLeft
+
+    # The moves which have been played in this game, from the beginning in orer.
+    # @return Move []
+    @property
+    def moves(self):
+        return self._moves
 
     # Gets the player whose turn it currently is as their number, 1-4.
     # @return int
@@ -95,20 +110,19 @@ class GameState:
                         for edgeY in [-1, 0, 1]:
                             row = move.row + i + edgeY
                             col = move.col + j + edgeX
+                            onBoard = isOnBoard(row, col)
                             if edgeX == 0 and edgeY == 0:
-                                if not isOnBoard(row, col) or self.board[row][col] != 0:
+                                if not onBoard or self.board[row][col] != 0:
                                     return False
                                 if isCornerTile(row, col, player):
                                     onCorner = True
                             elif edgeX == 0 or edgeY == 0:
-                                if isOnBoard(row, col) and self.board[row][col] == player:
+                                if onBoard and self.board[row][col] == player:
                                     return False
                             else:
-                                if isOnBoard(row, col) and self.board[row][col] == player:
+                                if onBoard and self.board[row][col] == player:
                                     onCorner = True
-        if not onCorner:
-            return False
-        return True
+        return onCorner
 
     # Checks whether the given Move has been played by the given player at any
     #  time in the past.
@@ -125,31 +139,34 @@ class GameState:
 
     # Exectures a Move by the given player on this game.
     # This game itself will be updated to reflect the Move.
-    # @param move   Move the Move to play
+    # @param move   Move the Move to play, or None to pass
     # @param player int  the player who should play the Move
     # @return Boolean true if the move was player, false if it was not
     def applyMove(self, move, player):
         self._turn += 1
 
-        if move == None:
-            return True
+        if move != None:
+            if not self.isMoveValid(move, player):
+                self._moves.append(None)
+                return False
 
-        if not self.isMoveValid(move, player):
-            return False
+            geometry = move.getGeometry()
+            for i in range(len(geometry)):
+                for j in range(len(geometry[i])):
+                    if geometry[i][j]:
+                        self._board[move.row + i][move.col + j] = player
 
-        geometry = move.getGeometry()
-        for i in range(len(geometry)):
-            for j in range(len(geometry[i])):
-                if geometry[i][j]:
-                    self._board[move.row + i][move.col + j] = player
+            self._piecesLeft[player].remove(move.piece)
 
-        self._piecesLeft[player].remove(move.piece)
+        self._moves.append(move)
         return True
 
     # Undoes a move by the given player (no matter of how long ago it was
     #  played).
     # @param move   Move the Move to be undone
     # @param player int  the player whose Move should be reversed
+    # @return Boolean whether the Move was successfully undone (false if it had
+    #                 never occurred and so could not be reversed)
     def undoMove(self, move, player):
         self._turn -= 1
 
@@ -163,16 +180,25 @@ class GameState:
         for i in range(len(geometry)):
             for j in range(len(geometry[i])):
                 if geometry[i][j]:
+
                     self._board[move.row + i][move.col + j] = 0
 
         self._piecesLeft[player].append(move.piece)
+        self._moves.remove(move)
         return True
+
+    # Undoes the most recently played Move.
+    # @return Boolean true if there was a move to undo, false otherwise
+    def undoLastMove(self):
+        if len(self._moves):
+            return undoMove(self._moves.pop(), ((self.turn - 2) % 4) + 1)
+        return False
 
     # Creates a new GameState exactly mirroring this one which can be modified
     #  without affecting the current one.
     # @return GameState
     def clone(self):
-        return GameState(self.turn, self.board, self.piecesLeft)
+        return GameState(self.turn, self.board, self.piecesLeft, self.moves)
 
     # Converts this GameState into a human-readable string.
     # Accessed via str(state), not state.__str__().
@@ -182,5 +208,6 @@ class GameState:
         s += gridToString(self.board)
         s += 'Pieces Remaining:\n'
         for player in [1,2,3,4]:
-            s += '   Player ' + str(player) + ': ' + str(self.piecesLeft[player]) + '\n'
+            s += '   Player ' + str(player) + ': '
+            s += str(self.piecesLeft[player]) + '\n'
         return s

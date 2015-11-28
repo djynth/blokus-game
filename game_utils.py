@@ -61,11 +61,12 @@ def gridToString(grid):
     for i in range(len(grid)):
         s += '|'
         for j in range(len(grid[i])):
-            if not val:
+            if not grid[i][j]:
                 s += ' '
-            elif isinstance(val, bool):
+            elif isinstance(grid[i][j], bool):
                 s += 'X'
-            else s += str(val)
+            else:
+                s += str(grid[i][j])
         s += '|\n'
 
     for i in range(len(grid[0]) + 2):

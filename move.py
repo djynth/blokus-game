@@ -57,6 +57,18 @@ class Move:
                     cells += 1
         return cells
 
+    def clone(self):
+        return Move(self.piece, self.numGeometry, self.row, self.col)
+
+    def __eq__(self, other):
+        if self is None and other is None:
+            return True
+        if self is None or other is None:
+            return False
+        return (self.piece == other.piece and
+                self.numGeometry == other.numGeometry and
+                self.row == other.row and self.col == other.col)
+
     # Converts this Move into a human-readable string.
     # Accessed via str(move), not move.__str__().
     def __str__(self):
