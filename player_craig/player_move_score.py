@@ -22,7 +22,7 @@ def getMove(state, player):
 
     okmovesandsquares = getLegalMovesAndSquares(state,player,oksquares)
 
-    print("  > Found "+str(len(oksquares))+" OK squares and "+str(len(okmovesandsquares))+" legal moves")
+#    print("  > Found "+str(len(oksquares))+" OK squares and "+str(len(okmovesandsquares))+" legal moves")
 
     mymove = None
 
@@ -66,15 +66,15 @@ def getMove(state, player):
       for option in okmovesandsquares:
         score = option['numcells'] / option['numspotstoplace']
 
+        option['distancefromcorner'] = max(1,math.sqrt(math.pow(option['square'][0]-homecorner[0],2)+math.pow(option['square'][1]-homecorner[1],2)))
+        score *= option['distancefromcorner']
+
         if 10 > 1:
           state.applyMove(option['move'], player)
           option['squaresafter'] = len(getLegalSquares(state,player))
   #        option['movesafter'] = len(getLegalMoves(state,player))
           state.undoMove(option['move'],player)
           score *= option['squaresafter']
-
-        option['distancefromcorner'] = max(1,math.sqrt(math.pow(option['square'][0]-homecorner[0],2)+math.pow(option['square'][1]-homecorner[1],2)))
-        score *= option['distancefromcorner']
 
         if score > bestscore:
           mymove = option['move']

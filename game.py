@@ -1,15 +1,8 @@
 import argparse
-<<<<<<< HEAD
 import player_craig.player_biggest_random as player1 #top left
 import player_craig.player_biggest_random as player2 #top right
 import player_craig.player_move_score as player3 #bottom right
 import player_craig.player_move_score_2 as player4 #bottom left
-=======
-import player_craig.player_fewest_options as player1 #top left
-import player_craig.player_biggest_random as player2 #top right
-import player_craig.player_random as player3 #bottom right
-import player_alex.player as player4 #bottom left
->>>>>>> origin/master
 import game_runner as GameRunner
 from game_logger import Logger
 import random
@@ -26,7 +19,7 @@ args = parser.parse_args()
 if args.runs == 1:
     logger = Logger(3)
     players = [player1, player2, player3, player4]
-    GameRunner.runGame(players, logger, True, args.gui)
+    GameRunner.runGame(players, logger, False, args.gui)
 else:
     logger = Logger(2)
     wrappedPlayers = [(0, player1), (1, player2), (2, player3), (3, player4)]
