@@ -4,10 +4,10 @@ from game_utils import *
 from gui import Gui
 import argparse
 from player_gui.player import GuiPlayer
-import player_craig.player_biggest_random as player1
-import player_craig.player_biggest_random as player2
-import player_craig.player_fewest_options as player3
-import player_craig.player_fewest_options as player4
+import player_matthew.player as player1 #top left
+import player_matthew.player as player2 #top right
+import player_matthew.player as player3 #bottom right
+import player_matthew.player as player4 #bottom left
 import sys
 import time
 
@@ -56,6 +56,7 @@ while passes < 4:
     else:
         passes = 0
 
+    time.sleep(0) #increase to increase time between moves
     if state.applyMove(move, player):
         print('  > Move made: ' + str(move))
     else:
