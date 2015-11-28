@@ -67,7 +67,13 @@ def getLegalSquares(state,player):
 
   return oksquares
 
-def getLegalMoves(state,player,oksquares):
+# This function returns a list of legal moves for player
+
+def getLegalMoves(state,player,oksquares=None):
+
+  if not oksquares:
+    oksquares = getLegalSquares(state,player)
+
   okmoves = []
   board = state.board
 
@@ -103,11 +109,29 @@ def getLegalMoves(state,player,oksquares):
                   move = Move(piece,geom,row,col)
                   okmoves.append(move)
 
-#                newstate = state.clone()
+  return okmoves
 
-#                try:
-#                  newstate.applyMove(move, player)
-#                  okmoves.append(move)
-#                except:
-#                  c = 1
+# An alternative way to retrieve a list of legal moves, but it runs slower than getLegalMoves
+
+def getLegalMovesTwo(state,player,oksquares):
+  okmoves = []
+
+  for oksquare in oksquares:                    # go through all open diagonal squares
+    for piece in state.piecesLeft[player]:      # consider each remaining piece
+      for geom in range(0,len(PIECES[piece])):  # consider each geometry for this piece
+        p = PIECES[piece][geom]                 # the actual pattern for this piece
+        height = len(p)                         # height of this geometry for this piece
+        width  = len(p[0])                      # width of this geometry for this piece
+        for a in range(0,height):               # go through rows of this piece and geometry
+          for b in range(0,width):              # go through columns of this piece and geometry
+            if p[a][b]:                         # if this piece has a square at this location
+              row = oksquare[0]-a               # what row and column this piece could be put at
+              col = oksquare[1]-b
+
+              try:
+                move = Move(piece,geom,row,col)
+                if state.isMoveValid(move,player):
+                  okmoves.append(move)
+              except:
+                b = 1
   return okmoves
