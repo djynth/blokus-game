@@ -1,6 +1,7 @@
 from game_state import *
 from move import *
 from game_utils import *
+from move_utils import *
 
 def getLegalMovesAndSquares(state,player,oksquares=None):
 

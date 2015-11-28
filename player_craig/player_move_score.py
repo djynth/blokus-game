@@ -5,14 +5,24 @@ from move_utils import *
 from player_craig.craig_utils import *
 import random
 import time
+import math
 
 def getMove(state, player):
+
+    if player == 1:
+      homecorner = (0,0)
+    elif player == 2:
+      homecorner = (0,COLS-1)
+    elif player == 3:
+      homecorner = (ROWS-1,COLS-1)
+    else:
+      homecorner = (ROWS-1,0)
 
     oksquares = getLegalSquares(state,player)
 
     okmovesandsquares = getLegalMovesAndSquares(state,player,oksquares)
 
-#    print("  > Found "+str(len(oksquares))+" OK squares and "+str(len(okmovesandsquares))+" legal moves")
+    print("  > Found "+str(len(oksquares))+" OK squares and "+str(len(okmovesandsquares))+" legal moves")
 
     mymove = None
 
@@ -52,18 +62,22 @@ def getMove(state, player):
         if numspotstoplace < fewestspots:
           fewestspots = numspotstoplace
 
-      biggestmoves = []
+      bestscore = -1
       for option in okmovesandsquares:
-        if option['numcells'] == biggestcells and option['numspotstoplace'] == fewestspots:
-          biggestmoves.append(option['move'])
-#          print("Time to play " + option['piece'] + " which has " + str(option['numspotstoplace']) + " places to go and size " + str(option['numcells']))
+        score = option['numcells'] / option['numspotstoplace']
 
-      if len(biggestmoves) == 0:
-        for option in okmovesandsquares:
-          if option['numspotstoplace'] == fewestspots:
-            biggestmoves.append(option['move'])
+        if 10 > 1:
+          state.applyMove(option['move'], player)
+          option['squaresafter'] = len(getLegalSquares(state,player))
+  #        option['movesafter'] = len(getLegalMoves(state,player))
+          state.undoMove(option['move'],player)
+          score *= option['squaresafter']
 
-      r = random.randint(0,len(biggestmoves)-1)
-      mymove = biggestmoves[r]
+#        option['distancefromcorner'] = max(1,math.sqrt(math.pow(option['square'][0]-homecorner[0],2)+math.pow(option['square'][1]-homecorner[1],2)))
+#        score *= option['distancefromcorner']
+
+        if score > bestscore:
+          mymove = option['move']
+          bestscore = score
 
     return mymove
