@@ -43,7 +43,8 @@ class GameState:
         #  board
         self._moves = []
         for move in moves:
-            self._moves.append(move.clone())
+            if move:                               # just in case move is None
+                self._moves.append(move.clone())
 
     # The current turn of the game, starting from 1 for the first turn.
     # @return int
