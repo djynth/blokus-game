@@ -80,7 +80,7 @@ def getMove(state, player):
           state.applyMove(option['move'], player)
           for nextplayer in range(1,5):
             if nextplayer != player:
-              score = score / len(getLegalSquares(state,nextplayer))
+              score = score / (1+len(getLegalSquares(state,nextplayer)))
           state.undoMove(option['move'],player)
 
         if score > bestscore:
