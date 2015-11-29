@@ -14,9 +14,9 @@ def runGame(players, logger, slowMode=False, gui=False):
     if gui:
         gui = Gui(state)
         # Upgrade console players to GUI players in GUI mode
-        for player in players:
+        for idx, player in enumerate(players):
             if player.__name__ == 'player_console.player':
-                player = GuiPlayer(gui)
+                players[idx] = GuiPlayer(gui)
 
     player1 = players[0]
     player2 = players[1]
