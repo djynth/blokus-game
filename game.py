@@ -1,8 +1,8 @@
 import argparse
-import player_craig.player_biggest_random as player1 #top left
-import player_craig.player_biggest_random as player2 #top right
-import player_craig.player_move_score as player3 #bottom right
-import player_craig.player_move_score_2 as player4 #bottom left
+import player_matthew.player as player1 #top left
+import player_craig.player_move_score as player2 #top right
+import player_matthew.player as player3 #bottom right
+import player_craig.player_move_score as player4 #bottom left #dad is player_craig.player_move_score
 import game_runner as GameRunner
 from game_logger import Logger
 import random
